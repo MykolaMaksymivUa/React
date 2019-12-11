@@ -78,19 +78,64 @@ function createCustomer(name: string, age?: number, city?: string): void {
   }
 }
 
+function checkoutBooks (customer: string, ...booksIDs: number[]): string[] {
+  console.log(`Checking out books for ${customer}`);
+
+  const titles: string[] = [];
+  for (const id of booksIDs) {
+    const book = getBookByID(id);
+    if (book && book.available) {
+      titles.push(book.title);
+    }
+  }
+
+  return titles;
+};
+
+function getTitles (author: string): string[];
+function getTitles (available: boolean): string[];
+function getTitles(id: number, available: boolean): string[];
+function getTitles(...args: any[]): string[] {
+  const books = getAllBooks();
+  const length = args.length;
+
+  if (!length) {
+    return [];
+  }
+
+  if (length === 1) {
+    const arg = args[0];
+
+    if (typeof arg === 'boolean') {
+      return books.filter(book => book.available === arg).map(book => book.title);
+    }
+
+    if (typeof arg === 'string') {
+      return books.filter(book => book.author === arg).map(book => book.title);
+    }
+  } else if (length === 2) {
+    const [id, available] = args;
+    return books.filter(book => book.id === id && book.available === available)
+    .map(book => book.title);
+  }
+
+}
 // Task 03.01
-console.log(getBookByID(2));
+// console.log(getBookByID(2));
 
-//Task 03.02
-let myID: string = createCustomerID('Mykola', 18);
-console.log(myID);
+// //Task 03.02
+// let myID: string = createCustomerID('Mykola', 18);
+// console.log(myID);
 
-let idGenerator: (name: string, id: number) => string;
-idGenerator = (name: string, id: number) => `${id}: ${name}`;
-idGenerator = createCustomerID
-myID = idGenerator('Anr', 12);
+// let idGenerator: (name: string, id: number) => string;
+// idGenerator = (name: string, id: number) => `${id}: ${name}`;
+// idGenerator = createCustomerID
+// myID = idGenerator('Anr', 12);
 
-createCustomer('Mykola');
+// createCustomer('Mykola');
 
-const titles = getBookTitlesByCategory();
-console.log(titles);
+// const titles = getBookTitlesByCategory();
+// console.log(titles);
+
+const gettedTitles = getTitles(1, true);
+console.log(gettedTitles);
