@@ -6,8 +6,18 @@ enum Category {
   Angular
 }
 
-function getAllBooks() {
-  const books = <const> [
+interface Book {
+  id: number;
+  title: string;
+  author: string;
+  available: boolean;
+  category: Category;
+  pages?: number;
+  markDamaged?: (reason: string) => string; 
+}
+
+function getAllBooks(): readonly Book[] {
+  const books: readonly Book[] = <const>[
     {
       id: 1,
       title: 'Refactoring JavaScript', 
@@ -56,7 +66,7 @@ function getBookTitlesByCategory(category: Category = Category.Javascript): stri
   return titles;
 }
 
-function getBookByID (id: number): any {
+function getBookByID (id: number): Book | undefined {
   const books = getAllBooks();
 
   return books.find(book => book.id === id);
@@ -120,6 +130,16 @@ function getTitles(...args: any[]): string[] {
   }
 
 }
+
+function printBook (book: Book): void {
+  console.log(`${book.title} by ${book.author}`);
+}
+
+// function assertStringValue (val: any): asserts val is string {
+//   if (typeof val !== 'string') {
+//     throw new Error('Value should have been a string')
+//   }
+// }
 // Task 03.01
 // console.log(getBookByID(2));
 
@@ -137,5 +157,17 @@ function getTitles(...args: any[]): string[] {
 // const titles = getBookTitlesByCategory();
 // console.log(titles);
 
-const gettedTitles = getTitles(1, true);
-console.log(gettedTitles);
+// const gettedTitles = getTitles(1, true);
+// console.log(gettedTitles);
+
+//Task 04.01
+const myBook: Book = {
+  id: 5,
+  title: 'Colors, Backgrounds, and Gradients',
+  author: 'Eric A. Meyer',
+  available: true,
+  category: Category.CSS,
+  markDamaged: (reason: string) => `Damaged: ${reason}`,
+}
+
+printBook(myBook);
